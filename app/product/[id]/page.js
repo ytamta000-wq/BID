@@ -21,7 +21,7 @@ export default function ProductPage(){
         <span className="eyebrow">COLLECTIBLES · AUCTION</span>
         <h1>Vintage Camera Collection</h1>
         <p className="muted">A curated vintage camera listing with seller-provided condition notes and photographs.</p>
-        <div className="bid-metrics"><div><small>Current high bid</small><strong>${current}</strong></div><div><small>Minimum</small><strong>$250</strong></div><div><small>Bids</small><strong>19</strong></div></div>
+        <div className="bid-metrics"><div><small>Minimum bid</small><strong>$250</strong></div><div><small>Max bid</small><strong>${current}</strong></div><div><small>Bids</small><strong>19</strong></div></div>
         <form onSubmit={placeBid} className="bid-form"><label>Your bid<input type="number" min={current+1} value={bid} onChange={e=>setBid(e.target.value)} placeholder={`More than $${current}`}/></label><button className="btn primary">Place bid</button></form>
         {message && <div className="notice">{message}</div>}
         <div className="row-actions"><button className="btn ghost" onClick={()=>setSaved(!saved)}>{saved?"♥ Saved":"♡ Save"}</button><Link className="btn ghost" href="/connect">Request connection</Link></div>
