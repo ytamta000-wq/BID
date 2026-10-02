@@ -1,5 +1,6 @@
 import "./globals.css";
 import SiteShell from "../components/SiteShell";
+import AuthProvider from "../components/AuthProvider";
 import { TriangleFX } from "../components/BackgroundFX";
 
 export const metadata = {
@@ -13,7 +14,10 @@ export default function RootLayout({ children }) {
       <body>
         <div className="starfield" aria-hidden="true" />
         <TriangleFX />
-        <SiteShell>{children}</SiteShell>
+
+        <AuthProvider>
+          <SiteShell>{children}</SiteShell>
+        </AuthProvider>
       </body>
     </html>
   );
