@@ -1,0 +1,1 @@
+export default function Messages(){return <main className="page"><section className="page-title glass"><span className="eyebrow">PRIVATE CHAT</span><h1>Messages</h1><p>Chat becomes available after a connection request is accepted.</p></section><div className="empty glass"><div>◌</div><h2>Your conversations</h2><p>No accepted connections yet.</p></div></main>}
