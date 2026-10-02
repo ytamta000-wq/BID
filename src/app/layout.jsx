@@ -1,0 +1,5 @@
+import "./globals.css";
+export const metadata = { title: "BID - Antique Vault" };
+export default function RootLayout({ children }) {
+  return <html lang="en"><body>{children}</body></html>;
+}
