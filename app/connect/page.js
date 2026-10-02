@@ -1,6 +1,3 @@
-"use client";
-import { useState } from "react";
-export default function Connect(){
- const [sent,setSent]=useState(false);
- return <main className="page"><section className="page-title glass"><span className="eyebrow">PRIVATE CONNECTIONS</span><h1>Connect safely</h1><p>Requests are required before private chat opens. Direct contact details remain hidden.</p></section><section className="connection-card glass"><div className="avatar">NA</div><div><h2>North Archive</h2><p className="muted">Seller · Vintage & collectibles</p></div><button className="btn primary" onClick={()=>setSent(true)}>{sent?"Request sent":"Request connection"}</button></section><div className="notice">Privacy model: no public phone number or email is shown on listings. A connection can be accepted or rejected before messaging becomes available.</div></main>
-}
+'use client';
+import {useState} from 'react';
+export default function Connect(){const [recipientId,setRecipientId]=useState('');const [status,setStatus]=useState('');async function send(){const r=await fetch('/api/requests',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({recipientId})});const d=await r.json();setStatus(r.ok?'Request sent.':d.error||'Unable to send request.')}return <main className="page"><section className="page-title glass"><span className="eyebrow">PRIVATE CONNECTIONS</span><h1>Connect safely</h1><p>Requests are required before private chat opens. No fake seller or request is shown.</p></section><section className="connection-card glass"><input value={recipientId} onChange={e=>setRecipientId(e.target.value)} placeholder="Recipient profile ID" /><button className="btn primary" onClick={send}>Request connection</button>{status&&<p>{status}</p>}</section></main>}

@@ -1,9 +1,31 @@
-"use client";
-import {useEffect,useState} from "react";
-import {useRouter} from "next/navigation";
-import {getClientAuth,setClientAuth} from "../../lib/auth";
-export default function Sell(){const r=useRouter();const[auth,setAuth]=useState(null);const[sent,setSent]=useState(false);const[convert,setConvert]=useState(false);const cats=["Antiques","Collectibles","Vintage","Art","Memorabilia","Music","Books","Fashion","Other","18+ Restricted"];
-useEffect(()=>{setAuth(getClientAuth())},[]);
-if(!auth)return <main className="auth-gate page"><section className="glass auth-card center"><span className="eyebrow">SELLER ACCESS</span><h1>Seller login required</h1><p className="small-copy">You need an authenticated seller account before publishing an item.</p><button className="btn primary wide" onClick={()=>r.push("/login?next=/sell&role=seller")}>Login as seller</button><button className="btn ghost wide" onClick={()=>r.push("/signup?role=seller&next=/sell")}>Create seller account</button></section></main>;
-if(auth.role!=="seller")return <main className="auth-gate page"><section className="glass auth-card center"><span className="eyebrow">SELLER ACCESS</span><h1>Convert to seller account</h1><p className="small-copy">You are signed in as a buyer. Convert this account before creating listings.</p><button className="btn primary wide" onClick={()=>{const x={...auth,role:"seller"};setClientAuth(x);setAuth(x)}}>Convert to seller account</button></section></main>;
-return <main className="page"><section className="page-title glass"><span className="eyebrow">SELLER DESK</span><h1>Publish a listing</h1><p>Set a minimum bid, describe the item accurately and choose the correct category.</p></section><form className="listing-form glass" onSubmit={e=>{e.preventDefault();setSent(true)}}><label>Item title<input required placeholder="e.g. Vintage desk clock"/></label><label>Category<select required><option value="">Choose category</option>{cats.map(c=><option key={c}>{c}</option>)}</select></label><div className="two"><label>Minimum bid<input required type="number" min="0" placeholder="250"/></label><label>Currency<select><option>USD $</option><option>GBP £</option><option>INR ₹</option></select></label></div><label>Image URL<input type="url" placeholder="https://..."/></label><label>Description<textarea required rows="6" placeholder="Condition, history, included items, shipping information..."/></label><label>Discount / offer<input placeholder="Optional"/></label><label className="check"><input type="checkbox" required/> I confirm the listing follows applicable laws, platform rules and category restrictions.</label><button className="btn primary">{sent?"Listing saved in demo mode":"Publish listing"}</button>{sent&&<div className="notice">Demo listing created locally. Connect a database and moderation service before public transactions.</div>}</form></main>}
+'use client';
+import { useState } from 'react';
+
+export default function Sell() {
+  const [files, setFiles] = useState([]);
+  const [main, setMain] = useState(0);
+  const [status, setStatus] = useState('');
+  const [busy, setBusy] = useState(false);
+
+  function onFiles(e) {
+    const next = Array.from(e.target.files || []).slice(0, 8);
+    setFiles(next); setMain(0);
+  }
+
+  async function submit(e) {
+    e.preventDefault(); setBusy(true); setStatus('Publishing…');
+    const form = new FormData(e.currentTarget);
+    const ordered = files.length ? [files[main], ...files.filter((_, i) => i !== main)] : [];
+    ordered.forEach(file => form.append('images', file));
+    try {
+      const res = await fetch('/api/listings', { method: 'POST', body: form });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Could not publish listing');
+      setStatus('Listing published successfully.');
+      e.currentTarget.reset(); setFiles([]); setMain(0);
+    } catch (err) { setStatus(err.message); }
+    finally { setBusy(false); }
+  }
+
+  return <main className="page"><section className="page-title glass"><span className="eyebrow">SELL</span><h1>List an item</h1><p>Add a main image plus extra images. The first image is the main image.</p></section><form className="glass" style={{padding:20,display:'grid',gap:14}} onSubmit={submit}><input name="title" required placeholder="Item title" /><textarea name="description" required placeholder="Description" rows={6} /><input name="category" placeholder="Category" defaultValue="Other" /><div style={{display:'grid',gap:8}}><label>Minimum bid</label><input name="minimumBid" type="number" min="0" step="0.01" required /><select name="currency" defaultValue="USD"><option>USD</option><option>INR</option><option>GBP</option></select></div><label>Images (1–8)</label><input type="file" accept="image/*" multiple required onChange={onFiles} />{files.length>0&&<div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:8}}>{files.map((file,i)=><button type="button" key={file.name+i} onClick={()=>setMain(i)} style={{border:i===main?'2px solid #fff':'1px solid #444',padding:4,background:'transparent',color:'#fff'}}><img src={URL.createObjectURL(file)} alt="" style={{width:'100%',aspectRatio:'1',objectFit:'cover'}} /><small>{i===main?'MAIN':'Set main'}</small></button>)}</div>}<button className="btn primary" disabled={busy}>{busy?'Publishing…':'Publish listing'}</button>{status&&<p>{status}</p>}</form></main>;
+}

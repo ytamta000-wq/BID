@@ -1,0 +1,3 @@
+import { NextResponse } from 'next/server';
+import { getCurrentUser } from '../../../../lib/current-user';
+export async function GET(){const user=await getCurrentUser();if(!user)return NextResponse.redirect(new URL('/login?next=/seller/paypal',process.env.NEXTAUTH_URL||'http://localhost:3000'));if(!process.env.PAYPAL_PARTNER_REFERRAL_URL)return NextResponse.json({error:'PAYPAL_PARTNER_CREDENTIALS_NOT_CONFIGURED',message:'Configure PayPal Partner Referrals credentials before enabling live seller onboarding.'},{status:503});const url=new URL(process.env.PAYPAL_PARTNER_REFERRAL_URL);url.searchParams.set('tracking_id',user.id);return NextResponse.redirect(url.toString());}

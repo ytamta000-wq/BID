@@ -1,11 +1,4 @@
-import Link from "next/link";
-export default function Dashboard(){
- return <main className="page"><section className="page-title glass"><span className="eyebrow">DASHBOARD</span><h1>Your BID desk</h1><p>Manage your activity, saved listings, bids and private connection requests.</p></section><div className="dashboard-grid">{[
- ["♡","Likes & saves","12 saved listings","/favorites"],
- ["⌁","My bids","7 active bids","/bids"],
- ["＋","Seller listings","3 published items","/sell"],
- ["✦","Connections","4 pending requests","/connect"],
- ["◌","Messages","2 accepted conversations","/messages"],
- ["⚙","Settings","Currency, privacy & account","/settings"]
- ].map(([i,t,s,h])=><Link href={h} className="dash-card glass" key={t}><b className="dash-icon">{i}</b><strong>{t}</strong><span>{s}</span><em>Open →</em></Link>)}</div></main>
-}
+import Link from 'next/link';
+import { getCurrentUser } from '../../lib/current-user';
+import { supabase } from '../../lib/supabase';
+export default async function Dashboard(){const user=await getCurrentUser();if(!user)return <main className="page"><section className="page-title glass"><h1>Your BID desk</h1><p>Sign in to see your real marketplace activity.</p><Link className="btn primary" href="/login">Sign in</Link></section></main>;const [{count:requests},{count:messages},{count:listings},{count:bids}]=await Promise.all([supabase.from('connection_requests').select('*',{count:'exact',head:true}).eq('recipient_id',user.id).eq('status','pending'),supabase.from('conversations').select('*',{count:'exact',head:true}).or(`user_a.eq.${user.id},user_b.eq.${user.id}`),supabase.from('listings').select('*',{count:'exact',head:true}).eq('seller_id',user.id),supabase.from('bids').select('*',{count:'exact',head:true}).eq('bidder_id',user.id)]);const cards=[["✦","Connections",`${requests||0} pending requests`,`/requests`],["◌","Messages",`${messages||0} conversations`,`/messages`],["□","Listings",`${listings||0} listings`,`/sell`],["↗","Bids",`${bids||0} bids`,`/explore`]];return <main className="page"><section className="page-title glass"><span className="eyebrow">DASHBOARD</span><h1>Your BID desk</h1><p>Real activity from your account. No demo counters.</p></section><div className="dashboard-grid">{cards.map(([icon,title,text,href])=><Link href={href} className="dash-card glass" key={title}><div>{icon}</div><h2>{title}</h2><p>{text}</p></Link>)}</div></main>}
