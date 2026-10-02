@@ -101,3 +101,157 @@ html,body{background:#000!important;color:#fff!important}
 @keyframes bidMicroStars{from{transform:translate3d(0,0,0)}to{transform:translate3d(55px,43px,0)}}
 .topbar,.page,.footer,.bottom-search{position:relative;z-index:2}.auth-page,.welcome-screen,.route-loader{position:relative;z-index:2}
 .welcome-screen,.route-loader{min-height:calc(100vh - 90px);display:grid;place-items:center;background:#000;overflow:hidden;isolation:isolate}.welcome-screen:before,.route-loader:before{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(255,255,255,.75) 0 .2px,transparent .4px);background-size:31px 37px;opacity:.35;animation:bidMicroStars 18s linear infinite}.welcome-triangle,.triangle-visual{position:absolute;left:50%;top:50%;width:230px;height:230px;transform:translate(-50%,-50%);display:grid;place-items:center;pointer-events:none}.welcome-triangle i,.triangle-visual:before,.triangle-visual:after{position:absolute;width:170px;height:170px;border:1px solid rgba(255,255,255,.88);clip-path:polygon(50% 0,100% 100%,0 100%);transform-origin:50% 58%;animation:triangle360 3.4s linear infinite}.welcome-triangle i:nth-child(2){width:145px;height:145px;opacity:.4;animation-duration:2.8s;animation-direction:reverse}.welcome-triangle i:nth-child(3){width:115px;height:115px;opacity:.2;animation-duration:4.1s}.triangle-visual:before{content:"";animation-duration:5s;opacity:.2}.triangle-visual:after{content:"";animation-duration:2.7s;animation-direction:reverse;opacity:.16}@keyframes triangle360{from{transform:rotate(0deg) translateZ(0)}to{transform:rotate(360deg) translateZ(0)}}.welcome-brand,.loader-brand{position:absolute;top:calc(50% + 130px);left:50%;transform:translateX(-50%);font-size:27px;font-weight:900;letter-spacing:-.06em;color:#fff}.welcome-brand span,.loader-brand span{color:#57b9ff}.welcome-loading{position:absolute;top:calc(50% + 170px);left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.28em;color:#8d969e}.triangle-fx{position:absolute;inset:0;pointer-events:none;z-index:0}.auth-card{z-index:3}.auth-page:before{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(255,255,255,.8) 0 .2px,transparent .4px);background-size:31px 37px;opacity:.28;animation:bidMicroStars 18s linear infinite}.nav-user{color:#aeb8c1;font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis}.auth-gate{min-height:calc(100vh - 120px);display:grid;place-items:center}.auth-gate .auth-card{max-width:480px}.signup-nav{background:linear-gradient(135deg,#20a86b,#087747);border:1px solid #46c78d;padding:8px 13px;border-radius:10px;color:#fff}
+
+/* BID LOADER V5 */
+.route-loader {
+  min-height: 100vh !important;
+  background: #000 !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  display: grid !important;
+  place-items: center !important;
+  overflow: hidden !important;
+}
+
+.loader-center {
+  position: relative;
+  width: min(420px, 82vw);
+  height: 430px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-pyramid {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  margin-bottom: 35px;
+  transform-style: preserve-3d;
+  animation: loaderRotate 3.2s linear infinite;
+}
+
+.loader-pyramid span {
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(255,255,255,.9);
+  clip-path: polygon(50% 0,100% 100%,0 100%);
+}
+
+.loader-pyramid span:nth-child(2) {
+  transform: rotateY(120deg) scale(.92);
+  opacity: .45;
+}
+
+.loader-pyramid span:nth-child(3) {
+  transform: rotateY(240deg) scale(.84);
+  opacity: .2;
+}
+
+@keyframes loaderRotate {
+  from {
+    transform: rotateY(0deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotateY(360deg) rotateZ(360deg);
+  }
+}
+
+.loader-brand {
+  position: static !important;
+  transform: none !important;
+  font-size: 28px !important;
+  letter-spacing: -.07em;
+  font-weight: 900;
+  margin-bottom: 42px;
+}
+
+.loader-brand span {
+  color: #59baff;
+}
+
+.index-loader {
+  width: min(340px, 78vw);
+}
+
+.index-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  letter-spacing: .25em;
+  color: rgba(255,255,255,.72);
+  margin-bottom: 8px;
+}
+
+.index-track {
+  width: 100%;
+  height: 1px;
+  background: rgba(255,255,255,.18);
+  overflow: hidden;
+}
+
+.index-progress {
+  height: 100%;
+  background: #fff;
+  box-shadow: 0 0 12px rgba(255,255,255,.8);
+  transition: width .04s linear;
+}
+
+.index-status {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 8px;
+  letter-spacing: .28em;
+  color: rgba(255,255,255,.4);
+}
+
+@media(max-width:600px) {
+  .loader-pyramid {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+/* BID V5 MICRO PARTICLE FIELD */
+.starfield {
+  z-index: 0 !important;
+  pointer-events: none !important;
+  background: #000 !important;
+}
+
+.starfield::before {
+  content: "";
+  position: absolute;
+  inset: -100%;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,.9) 0 .18px, transparent .38px),
+    radial-gradient(circle, rgba(255,255,255,.65) 0 .14px, transparent .32px);
+  background-size: 27px 29px, 59px 63px;
+  background-position: 0 0, 19px 31px;
+  opacity: .72;
+  animation: bidParticleDrift 24s linear infinite;
+}
+
+@keyframes bidParticleDrift {
+  from {
+    transform: translate3d(0,0,0);
+  }
+  to {
+    transform: translate3d(70px,55px,0);
+  }
+}
+
+.triangle-fx {
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+.topbar,
+.page,
+.footer,
+.bottom-search {
+  position: relative;
+  z-index: 2;
+}

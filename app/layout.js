@@ -1,5 +1,6 @@
 import "./globals.css";
 import SiteShell from "../components/SiteShell";
+import { TriangleFX } from "../components/BackgroundFX";
 
 export const metadata = {
   title: "BID — Collect. Discover. Bid.",
@@ -11,6 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <div className="starfield" aria-hidden="true" />
+        <TriangleFX />
         <SiteShell>{children}</SiteShell>
       </body>
     </html>
